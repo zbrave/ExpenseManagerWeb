@@ -69,7 +69,7 @@ public class UserDAOImpl implements UserDAO {
 	    user.setEmail(userInfo.getEmail());
 	    user.setUsername(userInfo.getUsername());
 	    user.setPassword(userInfo.getPassword());
-	    user.setEnabled(userInfo.isEnabled());
+	    user.setEnabled(userInfo.getEnabled());
 	    if(isNew){
 	    	Session session=this.sessionFactory.getCurrentSession();
 	    	session.persist(user);
@@ -95,7 +95,7 @@ public class UserDAOImpl implements UserDAO {
 		if(user==null){
 			return null;
 		}
-		return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.isEnabled());
+		return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.getEnabled());
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class UserDAOImpl implements UserDAO {
         if (user == null) {
             return null;
         }
-        return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.isEnabled());
+        return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.getEnabled());
 	}
 	
 	@Override
@@ -133,7 +133,7 @@ public class UserDAOImpl implements UserDAO {
         if (user == null) {
             return null;
         }
-        return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.isEnabled());
+        return new UserInfo(user.getId(),user.getEmail(),user.getUsername(),user.getPassword(),user.getEnabled());
 	}
 
 	@SuppressWarnings("unchecked")

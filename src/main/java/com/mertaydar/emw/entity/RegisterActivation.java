@@ -7,22 +7,36 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "passactivation")
-public class Passactivation {
+@Table(name = "register_activation")
+public class RegisterActivation {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "user_id")
-	private Integer userId;
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 	
-	@Column(name = "code")
+	@Column(name = "code", nullable = false, length = 45)
 	private String code;
+	
+	@Column(name = "date", nullable = false)
+	private Date date;
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
 	public Integer getId() {
 		return id;
@@ -32,12 +46,12 @@ public class Passactivation {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getCode() {
@@ -48,14 +62,14 @@ public class Passactivation {
 		this.code = code;
 	}
 
-	public Passactivation(Integer id, Integer userId, String code) {
+	public RegisterActivation(Integer id, User user, String code) {
 		super();
 		this.id = id;
-		this.userId = userId;
+		this.user = user;
 		this.code = code;
 	}
 	
-	public Passactivation() {
+	public RegisterActivation() {
 		
 	}
 }

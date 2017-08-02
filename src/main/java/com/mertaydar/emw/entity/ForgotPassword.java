@@ -7,33 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "activation")
-public class Activation {
+@Table(name = "forgot_password")
+public class ForgotPassword {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "username")
-	private String username;
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 	
-	@Column(name = "code")
+	@Column(name = "code", length = 45, nullable = false)
 	private String code;
 	
-	@Column(name = "recordDate")
-	private Date recordDate;
-
-	public Date getRecordDate() {
-		return recordDate;
-	}
-
-	public void setRecordDate(Date recordDate) {
-		this.recordDate = recordDate;
-	}
+	@Column(name = "date", nullable = false)
+	private Date date;
 
 	public Integer getId() {
 		return id;
@@ -43,14 +38,12 @@ public class Activation {
 		this.id = id;
 	}
 
-	
-
-	public String getUsername() {
-		return username;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getCode() {
@@ -60,6 +53,13 @@ public class Activation {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
 	
 }

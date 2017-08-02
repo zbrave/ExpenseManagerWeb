@@ -2,10 +2,11 @@ package com.mertaydar.emw.service.impl;
 
 import com.mertaydar.emw.service.PassactivationDAO;
 import com.mertaydar.emw.service.UserDAO;
-import com.mertaydar.emw.entity.Passactivation;
-import com.mertaydar.emw.model.PassactivationInfo;
+import com.mertaydar.emw.entity.RegisterActivation;
+import com.mertaydar.emw.model.ForgotPasswordInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,44 +36,44 @@ public class PassactivationDAOImpl implements PassactivationDAO {
     }
 	
 	@Override
-	public Passactivation findPassactivation(Integer id) {
+	public RegisterActivation findPassactivation(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria crit = session.createCriteria(Passactivation.class);
+        Criteria crit = session.createCriteria(RegisterActivation.class);
         crit.add(Restrictions.eq("id", id));
-        return (Passactivation) crit.uniqueResult();
+        return (RegisterActivation) crit.uniqueResult();
 	}
 	
 	@Override
-	public Passactivation findPassactivationWithCode(String code) {
+	public RegisterActivation findPassactivationWithCode(String code) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria crit = session.createCriteria(Passactivation.class);
+        Criteria crit = session.createCriteria(RegisterActivation.class);
         crit.add(Restrictions.eq("code", code));
-        return (Passactivation) crit.uniqueResult();
+        return (RegisterActivation) crit.uniqueResult();
 	}
 	
 	@Override
-	public Passactivation findPassactivationWithUser(Integer id) {
+	public RegisterActivation findPassactivationWithUser(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria crit = session.createCriteria(Passactivation.class);
+        Criteria crit = session.createCriteria(RegisterActivation.class);
         crit.add(Restrictions.eq("userId", id));
-        return (Passactivation) crit.uniqueResult();
+        return (RegisterActivation) crit.uniqueResult();
 	}
 	
 	@Override
-	public void savePassactivation(Passactivation act) {
+	public void savePassactivation(RegisterActivation act) {
 		Integer id = act.getId();
-		Passactivation actv = null;
+		RegisterActivation actv = null;
 		if( id!=null ){
 			actv = this.findPassactivation(id);
 		}
 		boolean isNew = false;
 		if( actv == null ){
 			isNew = true;
-			actv = new Passactivation();
+			actv = new RegisterActivation();
 		}
 		actv.setId(act.getId());
 	    actv.setCode(act.getCode());
-	    actv.setUserId(act.getUserId());
+	    actv.setUser(act.getUser());
 	    if(isNew){
 	    	Session session=this.sessionFactory.getCurrentSession();
 	    	session.persist(actv);
@@ -82,7 +83,7 @@ public class PassactivationDAOImpl implements PassactivationDAO {
 
 	@Override
 	public void deletePassactivation(Integer id) {
-		Passactivation act = this.findPassactivation(id);
+		RegisterActivation act = this.findPassactivation(id);
 		if(act!=null){
 			this.sessionFactory.getCurrentSession().delete(act);
 		}
@@ -90,7 +91,7 @@ public class PassactivationDAOImpl implements PassactivationDAO {
 	
 	@Override
 	public void deletePassactivationWithUser(Integer id) {
-		Passactivation act = this.findPassactivationWithUser(id);
+		RegisterActivation act = this.findPassactivationWithUser(id);
 		if(act!=null){
 			this.sessionFactory.getCurrentSession().delete(act);
 		}
@@ -98,13 +99,13 @@ public class PassactivationDAOImpl implements PassactivationDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PassactivationInfo> listPassactivations() {
+	public List<ForgotPasswordInfo> listPassactivations() {
 	    Session session = sessionFactory.getCurrentSession();
-	    Criteria crit = session.createCriteria(Passactivation.class);
-	    List<Passactivation> activations =(List<Passactivation>) crit.list();
-	    List<PassactivationInfo> activationInfos = new ArrayList<PassactivationInfo>();
-	    for(Passactivation b : activations){
-	    	activationInfos.add(new PassactivationInfo(b.getId(), b.getUserId(), b.getCode()));
+	    Criteria crit = session.createCriteria(RegisterActivation.class);
+	    List<RegisterActivation> activations =(List<RegisterActivation>) crit.list();
+	    List<ForgotPasswordInfo> activationInfos = new ArrayList<ForgotPasswordInfo>();
+	    for(RegisterActivation b : activations){
+	    	activationInfos.add(new ForgotPasswordInfo(b.getId(), b.getUser(), b.getCode(), new Date()));
 	    }
 	    return activationInfos;
 	}

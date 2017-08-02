@@ -1,33 +1,32 @@
 package com.mertaydar.emw.model;
- 
+
 public class UserInfo {
 	
 	private Integer id;
-	private String email;
+	private String name;
     private String username;
     private String password;
     private String passwordConf;
-    private boolean enabled;
-    private boolean banned;
+    private String email;
+    private String isOnline;
+    private byte[] photo;
+    private Boolean enabled;
     
-    private long avgAwarenessTime;
-    private long avgResponseTime;
-	private Integer waitingAck;
-	private Integer active;
-	private Integer waitingChild;
-	private Integer total;
-	private Integer reported;
-	private Integer ended;
     public UserInfo() {
     	
     }
-    
-    public UserInfo(Integer id,String email,String username, String password, boolean enabled) {
-    	this.id=id;
-    	this.email=email;
+
+	public UserInfo(Integer id, String name, String username, String password, String passwordConf, String email,
+			String isOnline, byte[] photo) {
+		super();
+		this.id = id;
+		this.name = name;
 		this.username = username;
 		this.password = password;
-		this.enabled = enabled;
+		this.passwordConf = passwordConf;
+		this.email = email;
+		this.isOnline = isOnline;
+		this.photo = photo;
 	}
 
 	public Integer getId() {
@@ -38,12 +37,12 @@ public class UserInfo {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getName() {
+		return name;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getUsername() {
@@ -62,14 +61,6 @@ public class UserInfo {
 		this.password = password;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
 	public String getPasswordConf() {
 		return passwordConf;
 	}
@@ -78,90 +69,44 @@ public class UserInfo {
 		this.passwordConf = passwordConf;
 	}
 
-	public boolean isBanned() {
-		return banned;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setBanned(boolean banned) {
-		this.banned = banned;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public long getAvgAwarenessTime() {
-		return avgAwarenessTime;
+	public String getIsOnline() {
+		return isOnline;
 	}
 
-	public void setAvgAwarenessTime(long avgAwarenessTime) {
-		this.avgAwarenessTime = avgAwarenessTime;
+	public void setIsOnline(String isOnline) {
+		this.isOnline = isOnline;
 	}
 
-	public long getAvgResponseTime() {
-		return avgResponseTime;
+	public byte[] getPhoto() {
+		return photo;
 	}
 
-	public void setAvgResponseTime(long avgResponseTime) {
-		this.avgResponseTime = avgResponseTime;
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
 	}
 
-	public Integer getTotal() {
-		return total;
+	@Override
+	public String toString() {
+		return "UserInfo [id=" + id + ", name=" + name + ", username=" + username + ", password=" + password
+				+ ", passwordConf=" + passwordConf + ", email=" + email + ", isOnline=" + isOnline + "]";
 	}
 
-	public void setTotal(Integer total) {
-		this.total = total;
+	public Boolean getEnabled() {
+		return enabled;
 	}
 
-	public Integer getActive() {
-		return active;
-	}
-
-	public void setActive(Integer active) {
-		this.active = active;
-	}
-
-	public Integer getWaitingAck() {
-		return waitingAck;
-	}
-
-	public void setWaitingAck(Integer waitingAck) {
-		this.waitingAck = waitingAck;
-	}
-
-	public Integer getWaitingChild() {
-		return waitingChild;
-	}
-
-	public void setWaitingChild(Integer waitingChild) {
-		this.waitingChild = waitingChild;
-	}
-
-	/**
-	 * @return the reported
-	 */
-	public Integer getReported() {
-		return reported;
-	}
-
-	/**
-	 * @param reported the reported to set
-	 */
-	public void setReported(Integer reported) {
-		this.reported = reported;
-	}
-
-	/**
-	 * @return the ended
-	 */
-	public Integer getEnded() {
-		return ended;
-	}
-
-	/**
-	 * @param ended the ended to set
-	 */
-	public void setEnded(Integer ended) {
-		this.ended = ended;
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
     
-    
- 
+   
+
 }

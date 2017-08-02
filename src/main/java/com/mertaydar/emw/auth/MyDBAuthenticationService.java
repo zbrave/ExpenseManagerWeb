@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.apache.log4j.Logger;
 
 import com.mertaydar.emw.service.BanDAO;
 import com.mertaydar.emw.service.UserDAO;
@@ -21,6 +22,8 @@ import com.mertaydar.emw.model.UserInfo;
 @Service
 public class MyDBAuthenticationService implements UserDetailsService {
 	
+	private static final Logger logger = Logger.getLogger(MyDBAuthenticationService.class);
+
     @Autowired
     private UserDAO userDAO;
     
@@ -33,12 +36,12 @@ public class MyDBAuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = this.userDAO.findLoginUserInfo(username);
-        System.out.println("UserInfo= " + userInfo);
         
         if (userInfo == null) {
             throw new UsernameNotFoundException("User " + username + " was not found in the database");
         }
-         
+        System.out.println("UserInfo= " + userInfo);
+        logger.info(userInfo.toString());
         // [USER,ADMIN,..]
         List<String> roles= userRoleDAO.getUserRoles(userInfo.getId());
          
@@ -48,27 +51,18 @@ public class MyDBAuthenticationService implements UserDetailsService {
                 // ROLE_USER, ROLE_ADMIN,..
                 GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
                 grantList.add(authority);
+                logger.info("Roles: "+role);
                 System.out.println("Yetkiler: "+role);
             }
         }
         
-   /*     UserDetails userDetails = (UserDetails) new User(userInfo.getUsername(), //
-                userInfo.getPassword(),grantList);
-        if (!userInfo.isEnabled()) {
-	        System.out.println("Kullanıcı yasaklı!!!");
-	        return null;
-        }*/
         UserDetails userDetails = buildUserForAuthentication(userInfo, grantList);
         return userDetails;
     }
     
     private User buildUserForAuthentication(UserInfo userInfo,List<GrantedAuthority> authorities) {
-    	if (!userInfo.isEnabled()) {
-    		userInfo.setEnabled(!banDAO.isBanned(userInfo.getId()));
-    		userDAO.saveUser(userInfo);
-    	}
     	return new User(userInfo.getUsername(), userInfo.getPassword(),
-				userInfo.isEnabled(), true, true, true, authorities);
+				userInfo.getEnabled(), true, true, true, authorities);
     }
      
 }

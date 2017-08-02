@@ -6,18 +6,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 @Entity
-@Table(name = "ban")
-public class Ban {
+@Table(name = "ban_history")
+public class BanHistory {
 	private Integer id;
-	private Integer userId;
+	private User user;
 	private String explanation;
-	private Date banTime;
-	private Date endTime;
-	private boolean banned;
+	private Date start;
+	private Date end;
 	
 	
 	@Id
@@ -30,15 +31,16 @@ public class Ban {
 		this.id = id;
 	}
 	
-	@Column(name = "user_id")
-	public Integer getUserId() {
-		return userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	public User getUser() {
+		return user;
 	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
-	@Column(name = "explanation", length = 255)
+	@Column(name = "explanation", length = 45, nullable = false)
 	public String getExplanation() {
 		return explanation;
 	}
@@ -46,31 +48,22 @@ public class Ban {
 		this.explanation = explanation;
 	}
 	
-	@Column(name = "ban_time", columnDefinition="DATETIME")
+	@Column(name = "start", columnDefinition="DATETIME", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getBanTime() {
-		return banTime;
+		return start;
 	}
 	public void setBanTime(Date banTime) {
-		this.banTime = banTime;
+		this.start = banTime;
 	}
 	
-	@Column(name = "end_time", columnDefinition="DATETIME")
+	@Column(name = "end", columnDefinition="DATETIME", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getEndTime() {
-		return endTime;
+		return end;
 	}
 	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+		this.end = endTime;
 	}
-	
-	@Column(name = "banned")
-	public boolean isBanned() {
-		return banned;
-	}
-	public void setBanned(boolean banned) {
-		this.banned = banned;
-	}
-
 	
 }
