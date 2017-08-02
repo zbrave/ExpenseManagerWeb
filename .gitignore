@@ -66,5 +66,5 @@ $RECYCLE.BIN/
 .classpath
 .project
 .settings
-Db schema
 target
+*.bak
