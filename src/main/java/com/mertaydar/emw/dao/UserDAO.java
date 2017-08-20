@@ -1,21 +1,72 @@
-package com.mertaydar.emw.service;
+package com.mertaydar.emw.dao;
 
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import com.mertaydar.emw.entity.User;
-import com.mertaydar.emw.model.UserInfo;
- 
-public interface UserDAO {
+
+@Repository
+@Transactional
+public class UserDAO implements IUserDAO {
 	
-	public User findUser (Integer id); 
-	public void saveUser (UserInfo userInfo);
-    public UserInfo findUserInfo (Integer id);  
-    public void deleteUser (Integer id);
-    
-    public User findLoginUser(String username);
-    public UserInfo findLoginUserInfo(String username);
-    public List<UserInfo> listUserInfos();
-    public List<UserInfo> listUserInfosPagination(Integer offset, Integer maxResults);
-    public Long count();
-	UserInfo findLoginUserInfoWithEmail(String username);
-}
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
+	
+	@Override
+	public User getActiveUser(String username) {
+		User activeUser = new User();
+		boolean enabled = true;
+		List<?> list = hibernateTemplate.find("FROM User WHERE username=? and enabled=?",
+				username, enabled);
+		if(!list.isEmpty()) {
+			activeUser = (User)list.get(0);
+		}
+		return activeUser;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getAllUsers() {
+		String hql = "FROM User as usr ORDER BY usr.id";
+		return (List<User>) hibernateTemplate.find(hql);
+	}
+
+	@Override
+	public User getUserById(int userId) {
+		return hibernateTemplate.get(User.class, userId);
+	}
+
+	@Override
+	public void addUser(User user) {
+		hibernateTemplate.save(user);
+		
+	}
+
+	@Override
+	public void updateUser(User user) {
+		
+		User usr = getUserById(user.getId());
+		usr.setEmail(user.getEmail());
+		usr.setEnabled(user.getEnabled());
+		usr.setName(user.getName());
+		usr.setPassword(user.getPassword());
+		usr.setPhoto(user.getPhoto());
+		usr.setUsername(user.getUsername());
+		hibernateTemplate.update(usr);
+	}
+
+	@Override
+	public void deleteUser(int userId) {
+		hibernateTemplate.delete(getUserById(userId));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean userExists(String username, String email) {
+		String hql = "FROM User as usr WHERE usr.username = ? and usr.email = ?";
+		List<User> users = (List<User>) hibernateTemplate.find(hql, username, email);
+		return users.size() > 0 ? true : false;
+	}
+} 
