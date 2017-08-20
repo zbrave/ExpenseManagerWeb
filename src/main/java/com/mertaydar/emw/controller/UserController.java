@@ -19,36 +19,54 @@ import com.mertaydar.emw.service.IUserService;
 
 @Controller
 public class UserController {
+
 	@Autowired
-	private IUserService Userservice;
+	private IUserService userService;
+
 	@GetMapping("User/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
-		User User = Userservice.getUserById(id);
+
+		User User = userService.getUserById(id);
+
 		return new ResponseEntity<User>(User, HttpStatus.OK);
 	}
+
 	@GetMapping("Users")
 	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> list = Userservice.getAllUsers();
+
+		List<User> list = userService.getAllUsers();
+
 		return new ResponseEntity<List<User>>(list, HttpStatus.OK);
 	}
+
 	@PostMapping("User")
 	public ResponseEntity<Void> addUser(@RequestBody User User, UriComponentsBuilder builder) {
-                boolean flag = Userservice.addUser(User);
-                if (flag == false) {
-        	    return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-                }
-                HttpHeaders headers = new HttpHeaders();
-                headers.setLocation(builder.path("/User/{id}").buildAndExpand(User.getId()).toUri());
-                return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
+		boolean flag = userService.addUser(User);
+
+		if (flag == false) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(builder.path("/User/{id}").buildAndExpand(User.getId()).toUri());
+
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
+
 	@PutMapping("User")
 	public ResponseEntity<User> updateUser(@RequestBody User User) {
-		Userservice.updateUser(User);
+
+		userService.updateUser(User);
+
 		return new ResponseEntity<User>(User, HttpStatus.OK);
 	}
+
 	@DeleteMapping("User/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id) {
-		Userservice.deleteUser(id);
+
+		userService.deleteUser(id);
+
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}	
 }  

@@ -16,20 +16,26 @@ import com.mertaydar.emw.auth.MyAppUserDetailsService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	@Autowired
 	private MyAppUserDetailsService myAppUserDetailsService;	
+	
 	@Autowired
 	private MyAppBasicAuthenticationEntryPoint myAppBasicAuthenticationEntryPoint;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
 		http.csrf().disable()
 		    .authorizeRequests()
 		    .antMatchers("/user/**").hasAnyRole("ADMIN","USER")
 		    .and().httpBasic().realmName("MY APP REALM")
 		    .authenticationEntryPoint(myAppBasicAuthenticationEntryPoint);
 	} 
-        @Autowired
+
+	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    	
     	     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
              auth.userDetailsService(myAppUserDetailsService).passwordEncoder(passwordEncoder);
 	}

@@ -5,19 +5,19 @@ import java.util.List;
 import com.mertaydar.emw.entity.User;
 
 public interface IUserDAO {
-	
-	User getActiveUser(String userName);
+
+	User isUserEnabled(String userName);
 
 	List<User> getAllUsers();
 
-	User getUserById(int userId);
-    
-	void addUser(User article);
-    
+	User getUserById(Integer userId);
+
+	void addUser(User user);
+
 	void updateUser(User user);
-    
-	void deleteUser(int userId);
-    
+
+	void deleteUser(Integer userId);
+
 	boolean userExists(String username, String email);
-	
+
 } 

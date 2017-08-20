@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,9 +16,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Table(name = "user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property="@id")
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -48,9 +54,9 @@ public class User implements Serializable {
 	@Column(name = "enabled", nullable = false)
     private Boolean enabled = false;
 	
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//	private List<UserRole> roles;
-//	
+	@OneToMany(targetEntity = UserRole.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<UserRole> roles;
+	
 //	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 //	private ForgotPassword forgotPassword;
 //    
@@ -143,13 +149,13 @@ public class User implements Serializable {
 		this.id = id;
 	}
 	
-//	public List<UserRole> getRoles() {
-//		return roles;
-//	}
-//	
-//	public void setRoles(List<UserRole> roles) {
-//		this.roles = roles;
-//	}
+	public List<UserRole> getRoles() {
+		return roles;
+	}
+	
+	public void setRoles(List<UserRole> roles) {
+		this.roles = roles;
+	}
 	
 	public String getEmail() {
 		return email;

@@ -17,46 +17,64 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration 
 @EnableTransactionManagement
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:application.properties")
 public class DBConfig {
+
 	@Autowired
-        private Environment env;	
+	private Environment env;	
+
 	@Bean
 	public HibernateTemplate hibernateTemplate() {
+
 		return new HibernateTemplate(sessionFactory());
+
 	}
- 	@Bean
+
+	@Bean
 	public SessionFactory sessionFactory() {
+
 		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
 		lsfb.setDataSource(getDataSource());
 		lsfb.setPackagesToScan("com.mertaydar.emw.entity");
 		lsfb.setHibernateProperties(hibernateProperties());
+
 		try {
 			lsfb.afterPropertiesSet();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return lsfb.getObject();
+
 	}
-        @Bean
-	public DataSource getDataSource() {
-	    BasicDataSource dataSource = new BasicDataSource();
-	    dataSource.setDriverClassName(env.getProperty("database.driverClassName"));
-	    dataSource.setUrl(env.getProperty("database.url"));
-	    dataSource.setUsername(env.getProperty("database.username"));
-	    dataSource.setPassword(env.getProperty("database.password"));
-	    return dataSource;
-	}
+
 	@Bean
-	public HibernateTransactionManager hibernateTransactionManager(){
-	    return new HibernateTransactionManager(sessionFactory());
+	public DataSource getDataSource() {
+
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setDriverClassName(env.getProperty("database.driverClassName"));
+		dataSource.setUrl(env.getProperty("database.url"));
+		dataSource.setUsername(env.getProperty("database.username"));
+		dataSource.setPassword(env.getProperty("database.password"));
+
+		return dataSource;
 	}
-        private Properties hibernateProperties() {
-            Properties properties = new Properties();
-            properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-            properties.put("hibernate.id.new_generator_mappings", env.getProperty("hibernate.id.new_generator_mappings"));
-            properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-            properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
-            return properties;        
-        }	
+
+	@Bean
+	public HibernateTransactionManager hibernateTransactionManager() {
+
+		return new HibernateTransactionManager(sessionFactory());
+
+	}
+
+	private Properties hibernateProperties() {
+
+		Properties properties = new Properties();
+		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		properties.put("hibernate.id.new_generator_mappings", env.getProperty("hibernate.id.new_generator_mappings"));
+		properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+		properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+
+		return properties;
+	}	
 } 

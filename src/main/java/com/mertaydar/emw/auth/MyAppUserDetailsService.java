@@ -14,15 +14,17 @@ import com.mertaydar.emw.dao.IUserDAO;
 
 @Service
 public class MyAppUserDetailsService implements UserDetailsService {
+	
 	@Autowired
 	private IUserDAO userDAO;
+	
 	@Override
-	public UserDetails loadUserByUsername(String userName)
-			throws UsernameNotFoundException {
-		com.mertaydar.emw.entity.User activeUserInfo = userDAO.getActiveUser(userName);
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		
+		com.mertaydar.emw.entity.User userInfo = userDAO.isUserEnabled(userName);
 		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");//activeUserInfo.get());
-		UserDetails userDetails = (UserDetails)new User(activeUserInfo.getUsername(),
-				activeUserInfo.getPassword(), Arrays.asList(authority));
+		UserDetails userDetails = (UserDetails)new User(userInfo.getUsername(), userInfo.getPassword(), Arrays.asList(authority));
 		return userDetails;
+		
 	}
 } 

@@ -13,10 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan("com.mertaydar.emw.*") 
 @EnableWebMvc   
 public class AppConfig extends WebMvcConfigurerAdapter {  
+	
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    	
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         builder.indentOutput(true);
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+        
     }    
 } 
